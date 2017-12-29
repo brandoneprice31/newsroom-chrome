@@ -10,38 +10,36 @@ class Comments extends Component {
 
     if (this.props.comments) {
       table = (
-          <Container style={{width: "80%"}}>
-            <Grid>
-              <Grid.Row>
-                <div style={{overflowY: "scroll", maxHeight:400, width:"100%"}}>
-                  <Comment.Group>
-                    {this.props.comments.map((comment) => (
-                      <Comment key={comment._id}>
-                        <Comment.Content>
-                          <Comment.Author>{comment.user.username}</Comment.Author>
-                          <Comment.Text>{comment.message}</Comment.Text>
-                        </Comment.Content>
-                      </Comment>
-                    ))}
-                  </Comment.Group>
-                </div>
-              </Grid.Row>
-              <Grid.Row>
-                <Container fluid>
-                  <Grid centered>
-                    <Grid.Row>
-                      <TextArea placeholder=" enter a comment..." id="commentInput" type="text" size='mini' style={{borderRadius: 2, minHeight: 75, minWidth: "90%", maxWidth:"90%", maxHeight:200}}/>
-                    </Grid.Row>
-                    <Grid.Row>
-                      <Button onClick={() => this.submitCommentClicked()} size='medium' color='blue' style={{width:"50%"}}>
-                        Submit
-                      </Button>
-                    </Grid.Row>
-                  </Grid>
-                </Container>
-              </Grid.Row>
-            </Grid>
-          </Container>
+          <Grid style={{width: '90%', position:'relative', left:15}}>
+            <Grid.Row>
+              <div style={{overflowY: "scroll", maxHeight:400, width:'100%'}}>
+                <Comment.Group>
+                  {this.props.comments.map((comment) => (
+                    <Comment key={comment._id}>
+                      <Comment.Content>
+                        <Comment.Author>{comment.user.username}</Comment.Author>
+                        <Comment.Text>{comment.message}</Comment.Text>
+                      </Comment.Content>
+                    </Comment>
+                  ))}
+                </Comment.Group>
+              </div>
+            </Grid.Row>
+            <Grid.Row>
+              <Container fluid>
+                <Grid centered textAlign='left'>
+                  <Grid.Row>
+                    <TextArea placeholder=" enter a comment..." id="commentInput" type="text" style={{borderRadius: 2, minWidth:350, minHeight:100, maxWidth:350, maxHeight:100}} />
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Button onClick={() => this.submitCommentClicked()} size='medium' color='blue' style={{width:"50%"}}>
+                      Submit
+                    </Button>
+                  </Grid.Row>
+                </Grid>
+              </Container>
+            </Grid.Row>
+          </Grid>
       );
     }
 

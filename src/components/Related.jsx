@@ -32,7 +32,7 @@ class Related extends Component {
       }, this);
 
       table = (
-          <Container style={{width: "80%"}}>
+          <Container style={{width: '90%', position:'relative', left:15}}>
               <div style={{width:"100%"}}>
                 <Grid centered>
                   {articles}
@@ -46,6 +46,17 @@ class Related extends Component {
   }
 
   onArticleClick(item, e) {
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+     var activeTab = arrayOfTabs[0];
+
+     if (!activeTab.selected) {
+       return;
+     }
+
+     chrome.tabs.update(activeTab.id, {url: item.url});
+   }.bind(item));
+
     this.props.changePage(item.url);
   }
 }

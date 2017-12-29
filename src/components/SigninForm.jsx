@@ -29,7 +29,7 @@ class SigninForm extends Component {
 
     return (
       <Container fluid>
-        <Grid centered style={{top: 100, position: "relative"}}>
+        <Grid centered style={{top: 100, position: 'fixed', width:'95%'}}>
           {
             arr.map((elem, index) => (
               <Grid.Row key={index}>

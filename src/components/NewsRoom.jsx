@@ -5,12 +5,22 @@ import Comments from './Comments';
 import Related from './Related';
 import {pageChange, commentsChange, logOutUser} from '../actions'
 import { Loader, Icon, Header, Dimmer, Container, Grid, Image, Segment, Comment, Button, Input, Divider, TextArea } from 'semantic-ui-react';
-import $ from "jquery";
+import $ from 'jquery';
 
 class NewsRoom extends Component {
   constructor(props){
     super(props);
     this.state = { showRelated: true };
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+     var activeTab = arrayOfTabs[0];
+
+     if (!activeTab.selected) {
+       return;
+     }
+
+     this.changeTo(activeTab.url);
+   }.bind(this));
   }
 
   render() {
@@ -18,97 +28,74 @@ class NewsRoom extends Component {
       var table = null;
 
       if (this.props.comments) {
-        var relatedOrComments = this.state.showRelated ? (<Related changePage={(url) => this.changeToRelated(url)}/>) : (<Comments />);
+        var relatedOrComments = this.state.showRelated ? (<Related changePage={(url) => this.changeTo(url)}/>) : (<Comments />);
 
         table = (
           <Grid.Row>
-            <Container fluid>
-              <Grid>
-                <Grid.Row>
-                  <Container fluid>
-                    <Grid centered>
-                      <Grid.Row>
-                        <Button.Group>
-                          <Button id="RelatedButton" active  onClick={() => this.relatedButtonClicked()}>
-                            Related
-                          </Button>
-                          <Button id="CommentsButton" onClick={() => this.commentsButtonClicked()}>
-                            Comments
-                          </Button>
-                        </Button.Group>
-                      </Grid.Row>
-                    </Grid>
-                  </Container>
-                </Grid.Row>
-                <Grid.Row>
-                  {relatedOrComments}
-                </Grid.Row>
-              </Grid>
-            </Container>
+            <Grid style={{width:'100%', height:'100%'}} textAlign='center'>
+              <Grid.Row>
+                <Grid centered>
+                  <Grid.Row>
+                    <Button.Group style={{position:'relative', left:10}}>
+                      <Button id="RelatedButton" active  onClick={() => this.relatedButtonClicked()}>
+                        Related
+                      </Button>
+                      <Button id="CommentsButton" onClick={() => this.commentsButtonClicked()}>
+                        Comments
+                      </Button>
+                    </Button.Group>
+                  </Grid.Row>
+                </Grid>
+              </Grid.Row>
+              <Grid.Row>
+                {relatedOrComments}
+              </Grid.Row>
+            </Grid>
           </Grid.Row>
         );
       }
 
       return (
-        <Container fluid>
-          <Grid columns='two'>
-            <Grid.Column width={16} floated='right'>
-              <Grid divided='vertically'>
+          <Grid divided='vertically'>
+            <Grid.Row>
+              <Grid textAlign='center' style={{width:'100%', height:'100%'}}>
                 <Grid.Row>
-                  <Container style={{width: "85%", height:190}}>
-                    <Grid>
-                      <Grid.Row>
-                        <Container fluid>
-                          <Grid centered>
-                            <Grid.Row>
-                              <img src="media/logo.png" style={{top:10, position:"relative", height:100}} />
-                            </Grid.Row>
-                          </Grid>
-                        </Container>
-                      </Grid.Row>
-                      <Grid.Row>
-                        <h4>
-                          {title}
-                        </h4>
-                      </Grid.Row>
-                    </Grid>
-                  </Container>
+                  <h2 style={{position: 'relative', top:20, bottom:20, left:10}}>
+                    {title}
+                  </h2>
                 </Grid.Row>
-                  {table}
                 <Grid.Row>
-                  <Container fluid>
-                    <Grid centered>
-                      <Grid.Row>
-                        <div style={{position:"relative", top:10}}>
-                          {this.props.user.username}
-                        </div>
-                      </Grid.Row>
-                      <Grid.Row>
-                        <Button onClick={ () => this.logOutClicked() } size='mini' style={{position:"relative", bottom:15, width:"50%"}}>
-                          Logout
-                        </Button>
-                      </Grid.Row>
-                    </Grid>
-                  </Container>
+                  <Loader id='loader' style={{position:'relative', bottom:10, width:'100%', left:'52%'}}/>
                 </Grid.Row>
               </Grid>
-            </Grid.Column>
+            </Grid.Row>
+              {table}
+            <Grid.Row>
+              <Grid centered style={{width:'100%', height:'100%', left:15, position:'relative'}}>
+                <Grid.Row style={{position:'relative', top:5}}>
+                    {this.props.user.username}
+                </Grid.Row>
+                <Grid.Row>
+                  <Button onClick={ () => this.logOutClicked() } size='mini' style={{position:'relative', bottom:15}}>
+                    Logout
+                  </Button>
+                </Grid.Row>
+              </Grid>
+            </Grid.Row>
           </Grid>
-        </Container>
       )
   }
 
-  changeToRelated(url) {
-    document.getElementById("pageInput").value = url;
-    this.pageInputChanged();
+  changeTo(url) {
+    this.pageInputChanged(url);
   }
 
-  pageInputChanged() {
+  pageInputChanged(unparsedUrl) {
     this.setState({
       showRelated: true
     });
 
-    var url = this.getURL();
+    var url = this.parseURL(unparsedUrl);
 
     if (url == null || url == "") {
       this.props.pageChange(null);
@@ -177,8 +164,7 @@ class NewsRoom extends Component {
   }
 
   // Parses current url.
-  getURL() {
-    var url = document.getElementById("pageInput").value;
+  parseURL(url) {
     var oldURL = url
     var index = 0;
     var newURL = oldURL;

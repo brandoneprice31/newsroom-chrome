@@ -13,7 +13,11 @@
     "scripts": ["public/background-bundle.js"]
   },
   "permissions": [
+    "tabs",
     "activeTab",
-    "storage"
+    "storage",
+    "http://*/*",
+    "https://*/*",
+    "webNavigation"
   ]
 }
