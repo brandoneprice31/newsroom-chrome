@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { Container, Grid, Image, Segment, Comment, Button, Input, Divider } from 'semantic-ui-react';
+import { Container, Grid, Image, Segment, Comment, Button, Input, Divider, Message } from 'semantic-ui-react';
 var CryptoJS = require("crypto-js");
 
 import {signInUser} from '../actions';
@@ -9,10 +9,22 @@ import Client from '../client/client';
 class SigninForm extends Component {
   constructor(props){
     super(props);
-    this.state = { showConfirm: false };
+    this.state = {
+      showConfirm: false,
+      errMessage: null
+     };
   }
 
   render() {
+    var errMessage = null;
+    if (this.state.errMessage) {
+      errMessage = (
+        <Message negative>
+          <p>{this.state.errMessage}</p>
+        </Message>
+      );
+    }
+
     var arr = [
       (<img style={{height:100}} src="/media/logo.png" />),
       (<Input id="username" type="text" size="small" placeholder="username"></Input>),
@@ -38,6 +50,7 @@ class SigninForm extends Component {
             ))
           }
         </Grid>
+        {errMessage}
       </Container>
     );
   }
@@ -55,7 +68,9 @@ class SigninForm extends Component {
 
     // Check if fields are empty.
     if (usernameInput.value == "" || passwordInput.value == "") {
-      alert("Fields can't be empty.");
+      this.setState({
+        errMessage: 'Fields cannot be empty.'
+      });
       return;
     }
 
@@ -68,8 +83,10 @@ class SigninForm extends Component {
         this.saveCachedUser(response.user);
       }.bind(this),
       function (error) {
-        alert("error: " + error);
-      }
+        this.setState({
+          errMessage: 'Username or password is incorrect.'
+        });
+      }.bind(this)
     );
   }
 
@@ -88,13 +105,17 @@ class SigninForm extends Component {
 
     // Check if fields are empty.
     if (usernameInput.value == "" || passwordInput.value == "" || confirmInput.value == "") {
-      alert("Fields can't be empty.");
+      this.setState({
+        errMessage: 'Fields cannot be empty.'
+      });
       return;
     }
 
     // Check if password and confirm match.
     if (passwordInput.value != confirmInput.value) {
-      alert("Your password and confirmation don't match.");
+      this.setState({
+        errMessage: 'Your password and confirmation do not match.'
+      });
       return;
     }
 
@@ -107,8 +128,10 @@ class SigninForm extends Component {
         this.saveCachedUser(response.user);
       }.bind(this),
       function (error) {
-        alert("error: " + error);
-      }
+        this.setState({
+          errMessage: 'Username already exists.'
+        });
+      }.bind(this)
     );
   }
 

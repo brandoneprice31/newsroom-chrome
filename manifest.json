@@ -19,5 +19,10 @@
     "http://*/*",
     "https://*/*",
     "webNavigation"
-  ]
+  ],
+  "icons": {
+    "16": "media/icon-16.png",
+    "48": "media/icon-48.png",
+    "128": "media/icon-128.png"
+  }
 }
