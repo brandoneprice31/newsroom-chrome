@@ -24,7 +24,26 @@ class NewsRoom extends Component {
   }
 
   render() {
-      var title = (this.props.page) ? this.props.page.website : "Open a news article";
+      var title = (
+        <Header as='h2' style={{position: 'relative', top:20, bottom:20, left:10}}>
+          Open a news article
+        </Header>
+      );
+
+      if (this.props.page) {
+        if (this.props.page.src_img) {
+          title = (
+            <Image src={this.props.page.src_img} style={{position: 'relative', top:20, bottom:20, left:10, height:70}}/>
+          );
+        } else {
+          title = (
+            <Header as='h2' style={{position: 'relative', top:20, bottom:20, left:10}}>
+              {this.props.page.website}
+            </Header>
+          );
+        }
+      }
+
       var table = null;
 
       if (this.props.comments) {
@@ -60,9 +79,7 @@ class NewsRoom extends Component {
             <Grid.Row>
               <Grid textAlign='center' style={{width:'100%', height:'100%'}}>
                 <Grid.Row>
-                  <h2 style={{position: 'relative', top:20, bottom:20, left:10}}>
-                    {title}
-                  </h2>
+                  {title}
                 </Grid.Row>
                 <Grid.Row>
                   <Loader id='loader' style={{position:'relative', bottom:10, width:'100%', left:'52%'}}/>
@@ -165,18 +182,7 @@ class NewsRoom extends Component {
 
   // Parses current url.
   parseURL(url) {
-    var oldURL = url
-    var index = 0;
-    var newURL = oldURL;
-    index = oldURL.indexOf('?');
-    if(index == -1){
-        index = oldURL.indexOf('#');
-    }
-    if(index != -1){
-        newURL = oldURL.substring(0, index);
-    }
-
-    return newURL;
+    return url;
   }
 }
 
