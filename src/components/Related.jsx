@@ -17,7 +17,7 @@ class Related extends Component {
         return (
           <Grid.Row key={index}>
             <Card onClick={boundClick}>
-              <Image src={article.img_url} />
+              <Image id={'img_' + index} src={article.img_url} onError={() => this.displayNoImg('img_' + index)} />
               <Card.Content extra>
                 <Card.Header>
                   {article.website}
@@ -45,8 +45,12 @@ class Related extends Component {
     return table;
   }
 
-  onArticleClick(item, e) {
+  displayNoImg(id) {
+    var img = document.getElementById(id);
+    img.style.display='none';
+  }
 
+  onArticleClick(item, e) {
     chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
      var activeTab = arrayOfTabs[0];
 

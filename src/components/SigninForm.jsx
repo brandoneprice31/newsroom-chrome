@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { Container, Grid, Image, Segment, Comment, Button, Input, Divider, Message } from 'semantic-ui-react';
+import { Container, Grid, Image, Segment, Comment, Button, Input, Divider, Message, Header } from 'semantic-ui-react';
 var CryptoJS = require("crypto-js");
 
 import {signInUser} from '../actions';
@@ -51,6 +51,13 @@ class SigninForm extends Component {
           }
         </Grid>
         {errMessage}
+        <Grid centered style={{bottom:20, position:'fixed', width:'95%'}}>
+          <Grid.Row>
+            <Header as='h3'>
+              powered by <a style={{cursor: 'pointer'}} onClick={() => this.changeToNewsAPI()}>NewsAPI</a>
+            </Header>
+          </Grid.Row>
+        </Grid>
       </Container>
     );
   }
@@ -139,6 +146,18 @@ class SigninForm extends Component {
     chrome.storage.sync.set({'user': JSON.stringify(user)}, function() {
       this.props.signInUser(user);
     }.bind(this));
+  }
+
+  changeToNewsAPI() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+     var activeTab = arrayOfTabs[0];
+
+     if (!activeTab.selected) {
+       return;
+     }
+
+     chrome.tabs.update(activeTab.id, {url: 'https://newsapi.org/'});
+   });
   }
 }
 
