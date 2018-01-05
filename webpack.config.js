@@ -32,7 +32,11 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   plugins: [
-    new ExtractTextPlugin({ filename: 'app.css', allChunks: true })
+    new ExtractTextPlugin({ filename: 'app.css', allChunks: true }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.optimize.UglifyJsPlugin()
   ],
   devServer: {
     historyApiFallback: true,
