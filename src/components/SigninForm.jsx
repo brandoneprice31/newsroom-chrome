@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { Container, Grid, Image, Segment, Comment, Button, Input, Divider, Message, Header } from 'semantic-ui-react';
+import { Container, Grid, Image, Segment, Comment, Button, Input, Divider, Message, Header, Icon } from 'semantic-ui-react';
 var CryptoJS = require("crypto-js");
 
 import {signInUser} from '../actions';
 import Client from '../client/client';
+var configAuth = require('../auth/auth');
 
 class SigninForm extends Component {
   constructor(props){
@@ -13,6 +14,8 @@ class SigninForm extends Component {
       showConfirm: false,
       errMessage: null
      };
+
+     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => this.tabUpdated(tabId, changeInfo, tab));
   }
 
   render() {
@@ -27,6 +30,10 @@ class SigninForm extends Component {
 
     var arr = [
       (<img style={{height:100}} src="/media/logo.png" />),
+      (<Button color='facebook' onClick={() => this.facebookClick()}>
+          <Icon name='facebook' /> Facebook Connect
+       </Button>),
+      (<Divider horizontal>Or</Divider>),
       (<Input id="username" type="text" size="small" placeholder="username"></Input>),
       (<Input id="password" type="password" size="small" placeholder="password"></Input>),
       (<Container>
@@ -36,12 +43,12 @@ class SigninForm extends Component {
     ];
 
     if (this.state.showConfirm) {
-      arr.splice(3, 0, (<Input id="confirm" type="password" size="small" placeholder="confirm password"></Input>));
+      arr.splice(5, 0, (<Input id="confirm" type="password" size="small" placeholder="confirm password"></Input>));
     }
 
     return (
       <Container fluid>
-        <Grid centered style={{top: 100, position: 'fixed', width:'95%'}}>
+        <Grid centered style={{top: 65, position: 'fixed', width:'95%'}}>
           {
             arr.map((elem, index) => (
               <Grid.Row key={index}>
@@ -60,6 +67,44 @@ class SigninForm extends Component {
         </Grid>
       </Container>
     );
+  }
+
+  facebookClick() {
+    var fbRedirectURL = 'https://www.facebook.com/dialog/oauth?' +
+      'client_id=' + configAuth.fb.clientID +
+      '&scope=' + 'public_profile,email,user_friends' +
+      '&redirect_uri=' + configAuth.fb.redirectURL
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+       var activeTab = arrayOfTabs[0];
+
+       if (!activeTab.selected) {
+         return;
+       }
+
+       // save the current tab
+       this.props.redirectTab = activeTab;
+
+       // access redirect url for oauth
+       chrome.tabs.update(activeTab.id, {url: fbRedirectURL});
+     }.bind(this));
+  }
+
+  tabUpdated(tabId, changeInfo, tab) {
+    if (!this.props.redirectTab || tabId != this.props.redirectTab.id || changeInfo.status != 'complete') {
+      return;
+    }
+
+    // get the response from in the content script
+    chrome.tabs.sendMessage(tabId, {text: 'report_back'}, function(user) {
+      var user = JSON.parse(user);
+      this.saveCachedUser(user);
+
+      // redirect to previous
+      var url = this.props.redirectTab.url;
+      this.props.redirectTab = null;
+      chrome.tabs.update(tabId, {url: url});
+    }.bind(this));
   }
 
   loginClick() {

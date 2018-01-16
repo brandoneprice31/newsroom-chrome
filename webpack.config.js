@@ -5,7 +5,8 @@ module.exports = {
   context: __dirname,
   entry: {
         popup: "./src/index.jsx",
-        background: "./background.jsx"
+        background: "./background.jsx",
+        content: "./content.jsx"
     },
   output: {
     path: __dirname + '/public',
