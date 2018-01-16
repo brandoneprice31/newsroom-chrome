@@ -90,7 +90,7 @@ class NewsRoom extends Component {
             <Grid.Row>
               <Grid centered style={{width:'100%', height:'100%', left:15, position:'relative'}}>
                 <Grid.Row style={{position:'relative', top:5}}>
-                    {this.props.user.username}
+                    {this.props.user.username ? this.props.user.username : this.props.user.first_name + ' ' + this.props.user.last_name}
                 </Grid.Row>
                 <Grid.Row>
                   <Button onClick={ () => this.logOutClicked() } size='mini' style={{position:'relative', bottom:15}}>

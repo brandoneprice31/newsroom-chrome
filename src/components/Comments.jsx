@@ -17,7 +17,7 @@ class Comments extends Component {
                   {this.props.comments.map((comment) => (
                     <Comment key={comment._id}>
                       <Comment.Content>
-                        <Comment.Author>{comment.user.username}</Comment.Author>
+                        <Comment.Author>{this.props.user.username ? this.props.user.username : this.props.user.first_name + ' ' + this.props.user.last_name}</Comment.Author>
                         <Comment.Text>{comment.message}</Comment.Text>
                       </Comment.Content>
                     </Comment>
