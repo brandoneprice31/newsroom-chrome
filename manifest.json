@@ -3,7 +3,7 @@
 
   "name": "Newsroom",
   "description": "Newsroom is a web application that allows you to read news articles, find other articles on the same topic, and comment on them.",
-  "version": "1.1",
+  "version": "1.22",
 
   "browser_action": {
     "default_icon": "media/favicon.png",
