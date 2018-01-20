@@ -90,7 +90,8 @@ class NewsRoom extends Component {
             <Grid.Row>
               <Grid centered style={{width:'100%', height:'100%', left:15, position:'relative'}}>
                 <Grid.Row style={{position:'relative', top:5}}>
-                  <img src={this.props.user.prof_pic ? this.props.user.prof_pic.replace('amp;', '') + '&type=medium' : 'https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png'} />
+                  <img src={this.props.user.prof_pic ? this.props.user.prof_pic.replace('amp;', '') + '&type=medium' : 'https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png'}
+                       style={{width:'50', height:'50'}} />
                 </Grid.Row>
                 <Grid.Row style={{position:'relative', top:-10}}>
                     {this.props.user.username ? this.props.user.username : this.props.user.first_name + ' ' + this.props.user.last_name}
