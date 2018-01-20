@@ -90,9 +90,12 @@ class NewsRoom extends Component {
             <Grid.Row>
               <Grid centered style={{width:'100%', height:'100%', left:15, position:'relative'}}>
                 <Grid.Row style={{position:'relative', top:5}}>
+                  <img src={this.props.user.prof_pic ? this.props.user.prof_pic.replace('amp;', '') + '&type=medium' : 'https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png'} />
+                </Grid.Row>
+                <Grid.Row style={{position:'relative', top:-10}}>
                     {this.props.user.username ? this.props.user.username : this.props.user.first_name + ' ' + this.props.user.last_name}
                 </Grid.Row>
-                <Grid.Row>
+                <Grid.Row style={{position:'relative', top:-15}}>
                   <Button onClick={ () => this.logOutClicked() } size='mini' style={{position:'relative', bottom:15}}>
                     Logout
                   </Button>

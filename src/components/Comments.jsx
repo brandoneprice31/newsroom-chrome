@@ -16,8 +16,9 @@ class Comments extends Component {
                 <Comment.Group>
                   {this.props.comments.map((comment) => (
                     <Comment key={comment._id}>
+                      <Comment.Avatar src={comment.user.prof_pic ? comment.user.prof_pic.replace('amp;', '') : 'https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png'} />
                       <Comment.Content>
-                        <Comment.Author>{this.props.user.username ? this.props.user.username : this.props.user.first_name + ' ' + this.props.user.last_name}</Comment.Author>
+                        <Comment.Author>{comment.user.username ? comment.user.username : comment.user.first_name + ' ' + comment.user.last_name}</Comment.Author>
                         <Comment.Text>{comment.message}</Comment.Text>
                       </Comment.Content>
                     </Comment>
