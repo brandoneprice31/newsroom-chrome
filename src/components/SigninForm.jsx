@@ -163,6 +163,13 @@ class SigninForm extends Component {
       return;
     }
 
+    if (usernameInput.value.indexOf(' ') > -1) {
+      this.setState({
+        errMessage: 'Spaces are not allowed in usernames.'
+      });
+      return;
+    }
+
     // Check if password and confirm match.
     if (passwordInput.value != confirmInput.value) {
       this.setState({
@@ -178,6 +185,17 @@ class SigninForm extends Component {
       { username: usernameInput.value, password: hash },
       function (response) {
         this.saveCachedUser(response.user);
+
+        chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+          var activeTab = arrayOfTabs[0];
+
+          if (!activeTab.selected) {
+            return;
+          }
+
+          chrome.tabs.update(activeTab.id, {url: './welcome.html'});
+        })
+
       }.bind(this),
       function (error) {
         this.setState({

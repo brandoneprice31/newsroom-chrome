@@ -2,6 +2,7 @@
 
 webpack;
 cd ..;
+rm -rf chrome-export.zip;
 cp -r chrome chrome-export;
 cd chrome-export;
 rm -rf node_modules;

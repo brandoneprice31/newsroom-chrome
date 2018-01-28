@@ -37,8 +37,8 @@ class Client {
   }
 
   static baseUrl(){
-    //return 'https://api.newsroom.bep-projects.com/';
-    return 'http://localhost:8080/';
+    return 'https://api.newsroom.bep-projects.com/';
+    //return 'http://localhost:8080/';
   }
 }
 

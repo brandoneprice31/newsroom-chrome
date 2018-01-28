@@ -6,7 +6,8 @@ module.exports = {
   entry: {
         popup: "./src/index.jsx",
         background: "./background.jsx",
-        content: "./content.jsx"
+        content: "./content.jsx",
+        welcome: "./src/welcome.jsx"
     },
   output: {
     path: __dirname + '/public',

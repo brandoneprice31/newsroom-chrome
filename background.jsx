@@ -20,7 +20,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     chrome.storage.sync.set({'user': JSON.stringify(user)}, function() {
       store.dispatch(signInUser(user));
 
-      // Open a webpage that basically says welcome to newsroom and describes how it works
-    });
+      chrome.tabs.update(tabId, {url: './welcome.html'});
+    }.bind(tabId));
   });
 });
