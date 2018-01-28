@@ -20,7 +20,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     chrome.storage.sync.set({'user': JSON.stringify(user)}, function() {
       store.dispatch(signInUser(user));
 
-      chrome.tabs.update(tabId, {url: './welcome.html'});
+      if (user.new) {
+        chrome.tabs.update(tabId, {url: './welcome.html'});
+      }
     }.bind(tabId));
   });
 });
