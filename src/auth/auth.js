@@ -1,6 +1,6 @@
 module.exports = {
     'fb' : {
-        'clientID'      : '1449825745127871',
-        'redirectURL' : 'https://api.newsroom.bep-projects.com/users/facebook_login',
+        'clientID'      : '164677740818802',
+        'redirectURL' : 'http://localhost:8080/users/facebook_login',
     }
 };
